@@ -1,12 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Container } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import "./styles.css";
+import Navbar from "./components/MyNavbar";
+import Landing from "./components/Landing";
+import Main from "./components/Main";
+import Signup from "./components/Singup";
+import AddSpec from "./components/addSpec";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+function App() {
+	return (
+		<Router>
+			<Container>
+				<Route path="/" component={Navbar} />
+				<Switch>
+					<Route exact path="/" component={Main} />
+					<Route path="/landing" component={Landing} />
+					<Route path="/signup" component={Signup} />
+					<Route path="/add" component={AddSpec} />
+				</Switch>
+			</Container>
+		</Router>
+	);
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
