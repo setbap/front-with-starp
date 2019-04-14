@@ -7,7 +7,7 @@ export const reguser = (newUser, history) => dispatch => {
 	axios
 		.post("http://localhost:5000/api/user/register", newUser)
 		.then(res => {
-			history.push("validate-email");
+			history.push("/signup/validate-email");
 		})
 		.catch(err => {
 			let data = [];
@@ -38,7 +38,7 @@ export const reguser = (newUser, history) => dispatch => {
 
 export const validate_email = (id, history) => dispatch => {
 	axios
-		.post("http://localhost:5000/api/user/register/validate-email", id)
+		.post("http://localhost:5000/api/user/register/validate", id)
 		.then(res => {
 			history.push("/login");
 		})
@@ -73,7 +73,7 @@ export const forget_pass = (email, history) => dispatch => {
 	axios
 		.post("http://localhost:5000/api/user/register/reset-password", email)
 		.then(res => {
-			history.push("reset-pass");
+			history.push("forget-password/reset-pass");
 		})
 		.catch(err => {
 			let data = [];
@@ -153,15 +153,24 @@ export const loginuser = data => dispatch => {
 		})
 		.catch(err => {
 			let data = [];
-			if (err.response.data.err) {
-				data = Array.of({
-					msg: err.response.data.err,
-					param: "data invalid"
-				});
+			if (err.response) {
+				if (err.response.data.err) {
+					data = Array.of({
+						msg: err.response.data.err,
+						param: "data invalid"
+					});
+				} else {
+					data = err.response.data.errors;
+				}
 			} else {
-				data = err.response.data.errors;
+				data = [
+					{
+						msg: "no connection",
+						param: "please connect"
+					}
+				];
 			}
-			console.log("sinaaa", data);
+
 			dispatch({
 				type: GET_ERR,
 				payload: data

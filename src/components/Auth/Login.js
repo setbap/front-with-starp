@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import ErrModal from "../error/ErrorModal";
+
 class Login extends Component {
 	constructor() {
 		super();
@@ -31,7 +33,7 @@ class Login extends Component {
 
 	componentWillReceiveProps(newProps) {
 		if (newProps.auth.isAuth) {
-			this.props.history.push("/dashboard");
+			this.props.history.push("/");
 		}
 
 		if (newProps.err) {
@@ -53,11 +55,21 @@ class Login extends Component {
 	}
 
 	render() {
+		const { user } = this.props.auth;
 		const { errors } = this.state;
 		return (
 			<React.Fragment>
 				<p className="display-4 m-3"> Login </p>
-				<Form className="container mt-3 p-3 rounded border">
+				<ErrModal
+					numberErr={this.state.errors.length}
+					handleErr={this.handleErr}
+					className=""
+					data={errors}
+				/>
+				<Form
+					onSubmit={this.handleSubmit}
+					className="container mt-3 p-3 rounded border"
+				>
 					<FormGroup>
 						<Label for="email">Email</Label>
 						<Input

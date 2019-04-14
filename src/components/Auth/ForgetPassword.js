@@ -9,7 +9,7 @@ class ForgetPassword extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			userId: "",
+			email: "",
 			errors: []
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +41,7 @@ class ForgetPassword extends React.Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		const id = {
-			userId: this.state.userId
+			email: this.state.email
 		};
 		this.props.forget_pass(id, this.props.history);
 	}
@@ -66,7 +66,7 @@ class ForgetPassword extends React.Component {
 						<Input
 							onChange={this.handleChange}
 							type="Email"
-							name="userId"
+							name="email"
 							id="id"
 							placeholder="your logged email"
 						/>
