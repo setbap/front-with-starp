@@ -1,15 +1,84 @@
 import React from "react";
+import ErrModal from "../error/ErrorModal";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { reguser } from "../../actions/authActions";
+import { withRouter } from "react-router-dom";
+class Signup extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			name: "",
+			email: "",
+			password: "",
+			passwordconfrim: "",
+			errors: [],
+			modal: false
+		};
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleErr = this.handleErr.bind(this);
+		this.toggle = this.toggle.bind(this);
+	}
 
-export default class Signup extends React.Component {
+	toggle() {
+		this.setState(prevState => ({
+			modal: !prevState.modal
+		}));
+	}
+
+	componentWillReceiveProps(newProps) {
+		console.log("in");
+
+		if (newProps.err) {
+			this.setState({
+				errors: newProps.err
+			});
+		}
+	}
+
+	handleChange(e) {
+		this.setState({
+			[e.target.name]: e.target.value
+		});
+	}
+	handleErr(e) {
+		this.setState({
+			errors: []
+		});
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+		const newUser = {
+			name: this.state.name,
+			email: this.state.email,
+			password: this.state.password,
+			passwordconfrim: this.state.passwordconfrim
+		};
+		this.props.reguser(newUser, this.props.history);
+	}
 	render() {
+		const { user } = this.props.auth;
+		const { errors } = this.state;
 		return (
 			<React.Fragment>
 				<p className="display-4 m-3"> Signup </p>
-				<Form className="container mt-3 p-3 rounded border">
+				<ErrModal
+					numberErr={this.state.errors.length}
+					handleErr={this.handleErr}
+					className=""
+					data={errors}
+				/>
+				<Form
+					onSubmit={this.handleSubmit}
+					className="container mt-3 p-3 rounded border"
+				>
 					<FormGroup>
 						<Label for="Name">Name</Label>
 						<Input
+							onChange={this.handleChange}
 							type="text"
 							name="name"
 							id="Name"
@@ -19,6 +88,7 @@ export default class Signup extends React.Component {
 					<FormGroup>
 						<Label for="email">Email</Label>
 						<Input
+							onChange={this.handleChange}
 							type="email"
 							name="email"
 							id="email"
@@ -28,6 +98,7 @@ export default class Signup extends React.Component {
 					<FormGroup>
 						<Label for="Password">Password</Label>
 						<Input
+							onChange={this.handleChange}
 							type="password"
 							name="password"
 							id="Password"
@@ -37,8 +108,9 @@ export default class Signup extends React.Component {
 					<FormGroup>
 						<Label for="Confrim Password">Confrim Password</Label>
 						<Input
+							onChange={this.handleChange}
 							type="password"
-							name="passwordConfrim"
+							name="passwordconfrim"
 							id="Confrim Password"
 							placeholder="password Confrim"
 						/>
@@ -49,3 +121,20 @@ export default class Signup extends React.Component {
 		);
 	}
 }
+
+Signup.propTypes = {
+	reguser: PropTypes.func.isRequired,
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.Auth,
+	err: state.Err
+});
+
+export default withRouter(
+	connect(
+		mapStateToProps,
+		{ reguser }
+	)(Signup)
+);

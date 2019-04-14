@@ -11,13 +11,22 @@ export const reguser = (newUser, history) => dispatch => {
 		})
 		.catch(err => {
 			let data = [];
-			if (err.response.data.err) {
-				data = Array.of({
-					msg: err.response.data.err,
-					param: "data invalid"
-				});
+			if (err.response) {
+				if (err.response.data.err) {
+					data = Array.of({
+						msg: err.response.data.err,
+						param: "data invalid"
+					});
+				} else {
+					data = err.response.data.errors;
+				}
 			} else {
-				data = err.response.data.errors;
+				data = [
+					{
+						msg: "no connection",
+						param: "please connect"
+					}
+				];
 			}
 
 			dispatch({
