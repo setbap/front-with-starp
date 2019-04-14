@@ -1,8 +1,59 @@
-import React from "react";
+import React, { Component } from "react";
+import { loginuser } from "../../actions/authActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+class Login extends Component {
+	constructor() {
+		super();
+		this.state = {
+			email: "",
+			password: "",
+			errors: []
+		};
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleErr = this.handleErr.bind(this);
+	}
 
-export default class Signup extends React.Component {
+	handleChange(e) {
+		this.setState({
+			[e.target.name]: e.target.value
+		});
+	}
+
+	handleErr(e) {
+		this.setState({
+			errors: []
+		});
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.auth.isAuth) {
+			this.props.history.push("/dashboard");
+		}
+
+		if (newProps.err) {
+			this.setState({
+				errors: newProps.err
+			});
+		}
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+		const user = {
+			email: this.state.email,
+			password: this.state.password
+		};
+		console.log("done");
+
+		this.props.loginuser(user);
+	}
+
 	render() {
+		const { errors } = this.state;
 		return (
 			<React.Fragment>
 				<p className="display-4 m-3"> Login </p>
@@ -10,6 +61,8 @@ export default class Signup extends React.Component {
 					<FormGroup>
 						<Label for="email">Email</Label>
 						<Input
+							onChange={this.handleChange}
+							value={this.state.pasword}
 							type="email"
 							name="email"
 							id="email"
@@ -19,6 +72,8 @@ export default class Signup extends React.Component {
 					<FormGroup>
 						<Label for="Password">Password</Label>
 						<Input
+							onChange={this.handleChange}
+							value={this.state.pasword}
 							type="password"
 							name="password"
 							id="Password"
@@ -27,7 +82,24 @@ export default class Signup extends React.Component {
 					</FormGroup>
 					<Button className="mt-1">Submit</Button>
 				</Form>
+				<Link to="/signup">
+					Not account <span>Click Here</span>
+				</Link>
 			</React.Fragment>
 		);
 	}
 }
+Login.propTypes = {
+	loginuser: PropTypes.func.isRequired,
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.Auth,
+	err: state.Err
+});
+
+export default connect(
+	mapStateToProps,
+	{ loginuser }
+)(Login);

@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { reguser } from "../../actions/authActions";
 import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 class Signup extends React.Component {
 	constructor() {
 		super();
@@ -79,6 +81,7 @@ class Signup extends React.Component {
 						<Label for="Name">Name</Label>
 						<Input
 							onChange={this.handleChange}
+							value={this.state.name}
 							type="text"
 							name="name"
 							id="Name"
@@ -89,6 +92,7 @@ class Signup extends React.Component {
 						<Label for="email">Email</Label>
 						<Input
 							onChange={this.handleChange}
+							value={this.state.email}
 							type="email"
 							name="email"
 							id="email"
@@ -99,6 +103,7 @@ class Signup extends React.Component {
 						<Label for="Password">Password</Label>
 						<Input
 							onChange={this.handleChange}
+							value={this.state.password}
 							type="password"
 							name="password"
 							id="Password"
@@ -109,6 +114,7 @@ class Signup extends React.Component {
 						<Label for="Confrim Password">Confrim Password</Label>
 						<Input
 							onChange={this.handleChange}
+							value={this.state.passwordconfrim}
 							type="password"
 							name="passwordconfrim"
 							id="Confrim Password"
@@ -117,6 +123,13 @@ class Signup extends React.Component {
 					</FormGroup>
 					<Button className="mt-1">Submit</Button>
 				</Form>
+				<Link to="/signup/validate-email">
+					Have id to verfy <span>Click Here</span>
+				</Link>
+
+				<Link to="/forget-password">
+					Have id to verfy <span>Click Here</span>
+				</Link>
 			</React.Fragment>
 		);
 	}

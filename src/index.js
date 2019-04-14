@@ -8,6 +8,10 @@ import Navbar from "./components/MyNavbar";
 import Landing from "./components/Landing";
 import Main from "./components/Main";
 import Signup from "./components/Auth/Singup";
+import ValidateEmail from "./components/Auth/ValidateEmail";
+import ForgetPassword from "./components/Auth/ForgetPassword";
+import ChangePassword from "./components/Auth/ChangePassword";
+
 import Login from "./components/Auth/Login";
 import AddSpec from "./components/addSpec";
 import { Provider } from "react-redux";
@@ -40,10 +44,25 @@ function App() {
 				<Container>
 					<Switch>
 						<Route exact path="/" component={Main} />
-						<Route path="/landing" component={Landing} />
-						<Route path="/signup" component={Signup} />
-						<Route path="/login" component={Login} />
-						<Route path="/add" component={AddSpec} />
+						<Route exact path="/landing" component={Landing} />
+						<Route exact path="/signup" component={Signup} />
+						<Route
+							exact
+							path="/signup/validate-email"
+							component={ValidateEmail}
+						/>
+						<Route
+							exact
+							path="/forget-password"
+							component={ForgetPassword}
+						/>
+						<Route
+							exact
+							path="/forget-password/reset-pass"
+							component={ChangePassword}
+						/>
+						<Route exact path="/login" component={Login} />
+						<Route exact path="/add" component={AddSpec} />
 					</Switch>
 				</Container>
 			</Router>
