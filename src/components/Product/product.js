@@ -1,52 +1,151 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Row, Col } from "reactstrap";
+import Specification from "./Specification";
+import Comments from "./Comments";
+import classnames from "classnames";
+
+import {
+	TabContent,
+	TabPane,
+	Nav,
+	NavItem,
+	NavLink,
+	Row,
+	Col,
+	Button
+} from "reactstrap";
 import cj from "../fakeData/c.jpg";
 
 export default class Product extends Component {
-	static propTypes = {
-		prop: PropTypes
-	};
+	constructor(props) {
+		super(props);
 
+		this.toggle = this.toggle.bind(this);
+		this.state = {
+			activeTab: "1"
+		};
+	}
+	toggle(tab) {
+		if (this.state.activeTab !== tab) {
+			this.setState({
+				activeTab: tab
+			});
+		}
+	}
 	render() {
 		return (
-			<Row className="mt-4 ">
-				<Col md="6" className=" mb-5">
-					<img className="img-fluid" src={cj} />
-				</Col>
-				<Col md="6" className="text-black mb-2">
-					<h3>Young Woman Wearing Dress</h3>
-					<strong class="text-primary h4">
-						<p>
-							<span class="text-muted h5">Price : </span>
-							<span>$120.00</span>
-						</p>
-					</strong>
+			<React.Fragment>
+				<Row className="my-4">
+					<Col
+						lg="6"
+						className="my-4 text-black shadow mx-0 px-0 pb-4  "
+					>
+						<Row xs="12" className="mx-0 px-0 ">
+							<img className="d-block w-100" src={cj} />
+						</Row>
+						<Row className=" p-0 m-0 mt-4 d-flex justify-content-center align-self-center row">
+							<strong>
+								<div className="border-info rounded-pill text-muted shadow-sm p-3 d-inline-block  h5 border">
+									<span className=" h5">Color : </span>
+									<span>Red</span>
+								</div>
+							</strong>
 
-					<p className="justify">
-						A small river named Duden flows by their place and
-						supplies it with the necessary regelialia. It is a
-						paradisematic country, in which roasted parts of
-						sentences fly into your mouth.
-					</p>
-					<p>
-						On her way she met a copy. The copy warned the Little
-						Blind Text, that where it came from it would have been
-						rewritten a thousand times and everything that was left
-						from its origin would be the word "and" and the Little
-						Blind Text should turn around and return to its own,
-						safe country. But nothing the copy said could convince
-						her and so it didn’t take long until a few insidious
-						Copy Writers ambushed her, made her drunk with Longe and
-						Parole and dragged her into their agency, where they
-						abused her for their.
-					</p>
-
-					<a href="cart.html" class="btn btn-primary py-3 px-5">
-						Add to Cart
-					</a>
-				</Col>
-			</Row>
+							<strong>
+								<div className="rounded-pill border-info text-muted shadow-sm p-3 d-inline-block  h5 border">
+									<span className=" h5">Size : </span>
+									<span>xl</span>
+								</div>
+							</strong>
+						</Row>
+					</Col>
+					<Col lg="6" className="my-4 text-black shadow-sm p-4">
+						<h3>Young Woman Wearing Dress</h3>
+						<strong>
+							<div className="rounded-pill text-info shadow p-3 d-inline-block border-info h5 border">
+								<span className="text-muted h5">Price : </span>
+								<span>$120.00</span>
+							</div>
+						</strong>
+						<div class=" text-justify ">
+							<p className=" mb-0">
+								Lorem ipsum dolor sit amet consectetur
+								adipisicing elit. Alias commodi eveniet tempora,
+								obcaecati doloribus provident
+							</p>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur
+								adipisicing elit. Cum, quasi adipisci, magnam
+								voluptatem, earum explicabo natus sit placeat
+								modi fuga ipsum tempora officia officiis neque
+								rem est iste distinctio laboriosam quod
+								expedita. Quis nihil suscipit iure enim,
+								officiis ex facilis cumque eveniet quo. Tempora
+								officiis nostrum neque officia rerum sit
+								sapiente quidem molestias ipsa amet laborum
+								soluta voluptatibus sint accusamus facilis quia
+								velit culpa, maiores natus in dignissimos.
+								Cumque placeat obcaecati ducimus assumenda
+								reprehenderit labore similique nam veniam rem
+								dolores?
+							</p>
+						</div>
+						<Button
+							className="shadow"
+							outline
+							size="lg"
+							color="danger"
+						>
+							Add to Cart
+						</Button>
+					</Col>
+				</Row>
+				<Nav className="d-block  d-flex justify-content-center shadow my-4  ">
+					<Nav tag="li" className="page-item">
+						<NavLink
+							className={classnames({
+								"border-top": this.state.activeTab === "1",
+								"border-bottom": this.state.activeTab === "1",
+								"py-3": 1,
+								"border-info": 1
+							})}
+							onClick={() => {
+								this.toggle("1");
+							}}
+						>
+							Comments
+						</NavLink>
+					</Nav>
+					<Nav color="danger">
+						<NavLink
+							tag="li"
+							className="page-item"
+							className={classnames({
+								"border-top": this.state.activeTab === "2",
+								"border-bottom": this.state.activeTab === "2",
+								"py-3": 1,
+								"border-info": 1
+							})}
+							onClick={() => {
+								this.toggle("2");
+							}}
+						>
+							Specification
+						</NavLink>
+					</Nav>
+				</Nav>
+				<TabContent activeTab={this.state.activeTab}>
+					<TabPane tabId="1">
+						<Comments />
+						<Comments />
+						<Comments />
+						<Comments />
+					</TabPane>
+					<TabPane tabId="2">
+						<Specification />
+					</TabPane>
+				</TabContent>
+			</React.Fragment>
 		);
 	}
 }
