@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import AddSpec from "./AddSpec";
-import Upload from "./Upload/Upload";
-
+// import Upload from "./Upload/Upload";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupText,
 	Input,
 	TabContent,
-	TabPane,
 	Nav,
 	NavLink,
 	Row,
@@ -21,14 +21,14 @@ import {
 } from "reactstrap";
 import cj from "../../fakeData/c.jpg";
 
-export default class Product extends Component {
+class Product extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			title: "",
 			price: "",
-			price: "",
+			// price: "",
 			desc: "",
 
 			color: "",
@@ -89,7 +89,11 @@ export default class Product extends Component {
 						className="my-4 text-black shadow mx-0 px-0 pb-4  "
 					>
 						<Row xs="12" className="mx-0 px-0 ">
-							<img className="d-block w-100" src={cj} />
+							<img
+								className="d-block w-100"
+								alt="product"
+								src={cj}
+							/>
 							{/* <Upload /> */}
 						</Row>
 						<Row className=" p-0 m-0 mt-4 d-flex justify-content-center align-self-center row">
@@ -189,7 +193,7 @@ export default class Product extends Component {
 							/>
 						</InputGroup>
 
-						<div class=" text-justify ">
+						<div className=" text-justify ">
 							<FormGroup>
 								<Label for="desc">Descrition</Label>
 								<Input
@@ -213,14 +217,33 @@ export default class Product extends Component {
 					</NavLink>
 				</Nav>
 				<TabContent>
-					<AddSpec
-						adds={this.handlePushSpec}
-						items={this.state.spec}
-						remove={this.handleRemoveSpec}
-					/>
+					<AddSpec />
 				</TabContent>
 				<Button type="submit">submit</Button>
 			</Form>
 		);
 	}
 }
+
+Product.propTypes = {
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.Auth,
+	err: state.Err,
+	items: state.SpecItem.specs
+});
+
+// const mapDispatchToProps = dispatch => {
+// 	return {
+// 		removeSpec: item => dispatch({ type: DELETE_SPEC, payload: item })
+// 	};
+// };
+
+export default withRouter(
+	connect(
+		mapStateToProps
+		// mapDispatchToProps
+	)(Product)
+);

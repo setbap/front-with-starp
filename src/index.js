@@ -12,7 +12,7 @@ import Signup from "./components/Auth/Singup";
 import ValidateEmail from "./components/Auth/ValidateEmail";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import ChangePassword from "./components/Auth/ChangePassword";
-import Product from "./components/Product/product";
+// import Product from "./components/Product/product";
 
 import Login from "./components/Auth/Login";
 import AddSpec from "./components/admin/Product/AddSpec";

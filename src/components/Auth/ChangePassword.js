@@ -57,7 +57,7 @@ class ChangePassword extends React.Component {
 		this.props.new_pass(data, this.props.history);
 	}
 	render() {
-		const { user } = this.props.auth;
+		// const { user } = this.props.auth;
 		const { errors } = this.state;
 		return (
 			<React.Fragment>

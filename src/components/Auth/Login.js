@@ -55,7 +55,7 @@ class Login extends Component {
 	}
 
 	render() {
-		const { user } = this.props.auth;
+		// const { user } = this.props.auth;
 		const { errors } = this.state;
 		return (
 			<React.Fragment>

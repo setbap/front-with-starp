@@ -62,7 +62,7 @@ class Signup extends React.Component {
 		this.props.reguser(newUser, this.props.history);
 	}
 	render() {
-		const { user } = this.props.auth;
+		// const { user } = this.props.auth;
 		const { errors } = this.state;
 		return (
 			<React.Fragment>

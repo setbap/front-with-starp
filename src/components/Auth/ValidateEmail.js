@@ -46,7 +46,7 @@ class ValidateEmail extends React.Component {
 		this.props.validate_email(id, this.props.history);
 	}
 	render() {
-		const { user } = this.props.auth;
+		// const { user } = this.props.auth;
 		const { errors } = this.state;
 		return (
 			<React.Fragment>

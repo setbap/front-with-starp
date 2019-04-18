@@ -1,11 +1,16 @@
 import React from "react";
-import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import { Button, Label, Input } from "reactstrap";
 import Item from "./Item";
-export default class Example extends React.Component {
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { ADD_SPEC } from "../../../actions/type";
+import PropTypes from "prop-types";
+
+class AddSpec extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			detaile: [],
+			// detaile: [],
 			name: "",
 			desc: ""
 		};
@@ -20,10 +25,10 @@ export default class Example extends React.Component {
 		});
 	};
 
-	handleSubmit = e => {
+	handleSubmitSpec = e => {
 		e.preventDefault();
 
-		this.props.adds(this.state.name, this.state.desc);
+		this.props.adder(this.state.name, this.state.desc);
 		this.setState(state => {
 			// const list = state.detaile.concat(newUser);
 
@@ -48,25 +53,10 @@ export default class Example extends React.Component {
 	render() {
 		return (
 			<React.Fragment>
-				<Item
-					entries={this.props.items}
-					deleteItem={this.props.remove}
-				/>
-				<Form onSubmit={this.handleSubmit} className="p-3 mt-3 border">
-					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-						<Label for="desc" className="mr-sm-2">
-							desc
-						</Label>
-						<Input
-							onChange={this.handleChange}
-							value={this.state.desc}
-							type="text"
-							name="desc"
-							id="desc"
-							placeholder="text"
-						/>
-					</FormGroup>
-					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+				<Item />
+
+				<div className="p-3 mt-3 border">
+					<div className="mb-2 mr-sm-2 mb-sm-0">
 						<Label for="name" className="mr-sm-2">
 							name
 						</Label>
@@ -78,10 +68,52 @@ export default class Example extends React.Component {
 							id="name"
 							placeholder="name"
 						/>
-					</FormGroup>
-					<Button className="btn mt-3">add</Button>
-				</Form>
+					</div>
+
+					<div className="mb-2 mr-sm-2 mb-sm-0">
+						<Label for="desc" className="mr-sm-2">
+							desc
+						</Label>
+						<Input
+							onChange={this.handleChange}
+							value={this.state.desc}
+							type="text"
+							name="desc"
+							id="desc"
+							placeholder="text"
+						/>
+					</div>
+
+					<Button
+						onClick={this.handleSubmitSpec}
+						className="btn mt-3"
+					>
+						add
+					</Button>
+				</div>
 			</React.Fragment>
 		);
 	}
 }
+AddSpec.propTypes = {
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.Auth,
+	err: state.Err
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+		adder: (title, desc) =>
+			dispatch({ type: ADD_SPEC, payload: { title, desc } })
+	};
+};
+
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(AddSpec)
+);

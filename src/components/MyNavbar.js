@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink as NLink, Link } from "react-router-dom";
+import { NavLink as NLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutuser } from "../actions/authActions";
 import PropTypes from "prop-types";
@@ -49,6 +49,22 @@ class MyNavbar extends React.Component {
 	render() {
 		const { isAuth, user } = this.props.auth;
 
+		const loged = (
+			<UncontrolledDropdown nav inNavbar>
+				<DropdownToggle nav caret>
+					Options
+				</DropdownToggle>
+				<DropdownMenu right>
+					<DropdownItem tag={NLink} to="/add">
+						Option 1
+					</DropdownItem>
+					<DropdownItem>Option 2</DropdownItem>
+					<DropdownItem divider />
+					<DropdownItem>Reset</DropdownItem>
+				</DropdownMenu>
+			</UncontrolledDropdown>
+		);
+
 		const notwidelogged = (
 			<Nav className="ml-auto" navbar>
 				<NavItem>
@@ -89,21 +105,7 @@ class MyNavbar extends React.Component {
 				{isAuth ? loged : ""}
 			</Nav>
 		);
-		const loged = (
-			<UncontrolledDropdown nav inNavbar>
-				<DropdownToggle nav caret>
-					Options
-				</DropdownToggle>
-				<DropdownMenu right>
-					<DropdownItem tag={NLink} to="/add">
-						Option 1
-					</DropdownItem>
-					<DropdownItem>Option 2</DropdownItem>
-					<DropdownItem divider />
-					<DropdownItem>Reset</DropdownItem>
-				</DropdownMenu>
-			</UncontrolledDropdown>
-		);
+
 		return (
 			<div>
 				<Navbar color="light" light expand="md">
