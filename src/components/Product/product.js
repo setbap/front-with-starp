@@ -50,6 +50,24 @@ export default class Product extends Component {
 									<span>Red</span>
 								</div>
 							</strong>
+							<strong>
+								<div className="border-info rounded-pill text-muted shadow-sm p-3 d-inline-block  h5 border">
+									<span className=" h5">Material : </span>
+									<span>cattan</span>
+								</div>
+							</strong>
+							<strong>
+								<div className="border-info rounded-pill text-muted shadow-sm p-3 d-inline-block  h5 border">
+									<span className=" h5">category : </span>
+									<span>dress</span>
+								</div>
+							</strong>
+							<strong>
+								<div className="border-info rounded-pill text-muted shadow-sm p-3 d-inline-block  h5 border">
+									<span className=" h5">Brand : </span>
+									<span>irancattan</span>
+								</div>
+							</strong>
 
 							<strong>
 								<div className="rounded-pill border-info text-muted shadow-sm p-3 d-inline-block  h5 border">
@@ -60,7 +78,7 @@ export default class Product extends Component {
 						</Row>
 					</Col>
 					<Col lg="6" className="my-4 text-black shadow-sm p-4">
-						<h3>Young Woman Wearing Dress</h3>
+						<h3>Young Man Wearing Clothe</h3>
 						<strong>
 							<div className="rounded-pill text-info shadow p-3 d-inline-block border-info h5 border">
 								<span className="text-muted h5">Price : </span>
