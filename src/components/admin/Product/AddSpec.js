@@ -12,31 +12,31 @@ class AddSpec extends React.Component {
 		this.state = {
 			// detaile: [],
 			name: "",
-			desc: ""
+			desc: "",
 		};
 
 		// this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	handleChange = e => {
+	handleChange = (e) => {
 		this.setState({
-			[e.target.name]: e.target.value
+			[e.target.name]: e.target.value,
 		});
 	};
 
-	handleSubmitSpec = e => {
+	handleSubmitSpec = (e) => {
 		e.preventDefault();
 
 		this.props.adder(this.state.name, this.state.desc);
-		this.setState(state => {
+		this.setState((state) => {
 			// const list = state.detaile.concat(newUser);
 
 			return {
 				// ...this.state,
 				// detaile: list,
 				name: "",
-				desc: ""
+				desc: "",
 			};
 		});
 	};
@@ -96,24 +96,24 @@ class AddSpec extends React.Component {
 	}
 }
 AddSpec.propTypes = {
-	auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	auth: state.Auth,
-	err: state.Err
+	err: state.Err,
 });
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
 	return {
-		adder: (title, desc) =>
-			dispatch({ type: ADD_SPEC, payload: { title, desc } })
+		adder: (name, desc) =>
+			dispatch({ type: ADD_SPEC, payload: { name, desc } }),
 	};
 };
 
 export default withRouter(
 	connect(
 		mapStateToProps,
-		mapDispatchToProps
-	)(AddSpec)
+		mapDispatchToProps,
+	)(AddSpec),
 );

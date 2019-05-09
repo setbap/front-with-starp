@@ -14,7 +14,7 @@ import {
 	UncontrolledDropdown,
 	DropdownToggle,
 	DropdownMenu,
-	DropdownItem
+	DropdownItem,
 } from "reactstrap";
 
 class MyNavbar extends React.Component {
@@ -25,7 +25,7 @@ class MyNavbar extends React.Component {
 		this.handleToggleClick = this.handleToggleClick.bind(this);
 		this.state = {
 			isOpen: false,
-			toggle: ""
+			toggle: "",
 		};
 	}
 
@@ -36,14 +36,14 @@ class MyNavbar extends React.Component {
 
 	handleToggleClick(e) {
 		e.preventDefault();
-		this.setState(state => ({
-			toggle: state.toggle ? "" : "deactive"
+		this.setState((state) => ({
+			toggle: state.toggle ? "" : "deactive",
 		}));
 	}
 
 	toggle() {
 		this.setState({
-			isOpen: !this.state.isOpen
+			isOpen: !this.state.isOpen,
 		});
 	}
 	render() {
@@ -107,8 +107,8 @@ class MyNavbar extends React.Component {
 		);
 
 		return (
-			<div>
-				<Navbar color="light" light expand="md">
+			<div className="sticky-top">
+				<Navbar color="dark" dark expand="md">
 					<NavbarBrand tag={NLink} to="/">
 						Shonode
 					</NavbarBrand>
@@ -123,12 +123,12 @@ class MyNavbar extends React.Component {
 
 MyNavbar.propTypes = {
 	logoutuser: PropTypes.func.isRequired,
-	auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
 };
-const mapStateToProps = state => ({
-	auth: state.Auth
+const mapStateToProps = (state) => ({
+	auth: state.Auth,
 });
 export default connect(
 	mapStateToProps,
-	{ logoutuser }
+	{ logoutuser },
 )(MyNavbar);

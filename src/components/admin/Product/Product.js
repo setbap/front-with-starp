@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import AddSpec from "./AddSpec";
-// import Upload from "./Upload/Upload";
+import Upload from "./Upload/Upload";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
+import ErrModal from "../../error/ErrorModal";
+import axios from "axios";
+import Select from "react-select";
+
+import { addProd } from "../../../actions/prodActions";
 import {
 	InputGroup,
 	InputGroupAddon,
@@ -17,9 +22,8 @@ import {
 	Button,
 	Form,
 	Label,
-	FormGroup
+	FormGroup,
 } from "reactstrap";
-import cj from "../../fakeData/c.jpg";
 
 class Product extends Component {
 	constructor(props) {
@@ -28,8 +32,7 @@ class Product extends Component {
 		this.state = {
 			title: "",
 			price: "",
-			// price: "",
-			desc: "",
+			description: "",
 
 			color: "",
 			material: "",
@@ -39,76 +42,130 @@ class Product extends Component {
 			count: "",
 
 			commments: [],
-			spec: []
+			spec: [],
+			errors: [],
+			myBrands: [],
+			myCats: [],
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleErr = this.handleErr.bind(this);
+	}
+	componentDidMount() {
+		axios.get("http://localhost:5000/api/shop/allBrands").then((res) => {
+			let myopt = res.data.brands.map((item) => {
+				return { value: item._id, label: item.name };
+			});
+			this.setState({
+				myBrands: myopt,
+			});
+		});
+
+		axios
+			.get("http://localhost:5000/api/shop/allCategoreis")
+			.then((res) => {
+				let myopt = res.data.cat.map((item) => {
+					return { value: item._id, label: item.name };
+				});
+				this.setState({
+					myCats: myopt,
+				});
+			});
 	}
 
 	handleChange(e) {
 		this.setState({
-			[e.target.name]: e.target.value
+			[e.target.name]: e.target.value,
 		});
 	}
 
-	handlePushSpec = (title, desc) => {
-		// const newSpec = this.states.spec.concat({ title: "asd", desc: "asd" });
-		// this.setState({
-		// 	spec: newSpec
-		// });
-		this.setState(state => {
-			const list = [...state.spec, { title, desc }];
-
-			return {
-				...state,
-				spec: list
-			};
-		});
-		console.log(this.state);
+	handleChangeSelectB = (selectedOption) => {
+		this.setState({ brand: selectedOption.value, bs: selectedOption });
 	};
+	handleChangeSelectC = (selectedOption) => {
+		this.setState({ category: selectedOption.value, cs: selectedOption });
+	};
+
 	handleSubmit(e) {
 		e.preventDefault();
-		console.log(this.state);
+		this.props.addProd(
+			{
+				...this.state,
+				spec: this.props.items,
+				imageUrl: this.props.imgs[0],
+			},
+			this.props.history,
+		);
 	}
 
-	handleRemoveSpec = key => {
-		const filteredItems = this.state.spec.filter(item => {
-			return item !== key;
-		});
+	handleErr(e) {
 		this.setState({
-			spec: filteredItems
+			errors: [],
 		});
-	};
+	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.err) {
+			this.setState({
+				errors: newProps.err,
+			});
+		}
+	}
 	render() {
+		const { errors, myBrands, myCats } = this.state;
+
 		return (
 			<Form onSubmit={this.handleSubmit}>
+				<ErrModal
+					numberErr={this.state.errors.length}
+					handleErr={this.handleErr}
+					className=""
+					data={errors}
+				/>
 				<Row className="my-4">
 					<Col
 						lg="6"
 						className="my-4 text-black shadow mx-0 px-0 pb-4  "
 					>
 						<Row xs="12" className="mx-0 px-0 ">
-							<img
-								className="d-block w-100"
-								alt="product"
-								src={cj}
-							/>
-							{/* <Upload /> */}
+							<Upload />
 						</Row>
 						<Row className=" p-0 m-0 mt-4 d-flex justify-content-center align-self-center row">
 							<InputGroup className="px-4 py-2 my-2">
-								<InputGroupAddon addonType="prepend">
+								{/* <InputGroupAddon addonType="prepend">
 									<InputGroupText>brand</InputGroupText>
-								</InputGroupAddon>
-								<Input
-									name="brand"
-									onChange={this.handleChange}
-									value={this.state.brand}
-								/>
+								</InputGroupAddon> */}
+
+								{myBrands.length ? (
+									<Select
+										className="w-100"
+										placeholder="select brand"
+										name="brand"
+										value={this.state.bs}
+										onChange={this.handleChangeSelectB}
+										options={myBrands}
+									/>
+								) : (
+									""
+								)}
 							</InputGroup>
-							<br />
+
 							<InputGroup className="px-4 py-2 my-2">
+								{myCats.length ? (
+									<Select
+										className="w-100"
+										placeholder="select category"
+										value={this.state.cs}
+										name="category"
+										onChange={this.handleChangeSelectC}
+										options={myCats}
+									/>
+								) : (
+									""
+								)}
+							</InputGroup>
+
+							{/* <InputGroup className="px-4 py-2 my-2">
 								<InputGroupAddon addonType="prepend">
 									<InputGroupText>Category</InputGroupText>
 								</InputGroupAddon>
@@ -117,7 +174,7 @@ class Product extends Component {
 									onChange={this.handleChange}
 									value={this.state.category}
 								/>
-							</InputGroup>
+							</InputGroup> */}
 							<br />
 							<InputGroup className="px-4 py-2 my-2">
 								<InputGroupAddon addonType="prepend">
@@ -195,13 +252,13 @@ class Product extends Component {
 
 						<div className=" text-justify ">
 							<FormGroup>
-								<Label for="desc">Descrition</Label>
+								<Label for="description">description</Label>
 								<Input
 									type="textarea"
-									name="desc"
+									name="description"
 									onChange={this.handleChange}
-									value={this.state.desc}
-									id="desc"
+									value={this.state.description}
+									id="description"
 									rows="23"
 								/>
 							</FormGroup>
@@ -226,13 +283,14 @@ class Product extends Component {
 }
 
 Product.propTypes = {
-	auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	auth: state.Auth,
 	err: state.Err,
-	items: state.SpecItem.specs
+	items: state.SpecItem.specs,
+	imgs: state.Img.imgs,
 });
 
 // const mapDispatchToProps = dispatch => {
@@ -241,9 +299,7 @@ const mapStateToProps = state => ({
 // 	};
 // };
 
-export default withRouter(
-	connect(
-		mapStateToProps
-		// mapDispatchToProps
-	)(Product)
-);
+export default connect(
+	mapStateToProps,
+	{ addProd },
+)(withRouter(Product));

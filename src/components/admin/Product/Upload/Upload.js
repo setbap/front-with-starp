@@ -1,25 +1,48 @@
-import React, { Fragment, useState } from "react";
-import Message from "./Message";
-import Progress from "./Progress";
+import React, { Fragment, Component } from "react";
 import axios from "axios";
+import { ADD_IMG } from "../../../../actions/type";
+import { Progress, Alert } from "reactstrap";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import UpImgs from "./UploadedImage";
 
-const FileUpload = () => {
-	const [file, setFile] = useState("");
-	const [filename, setFilename] = useState("Choose File");
-	const [uploadedFile, setUploadedFile] = useState({});
-	const [message, setMessage] = useState("");
-	const [uploadPercentage, setUploadPercentage] = useState(0);
+class Upload extends Component {
+	constructor(props) {
+		super(props);
 
-	const onChange = e => {
-		setFile(e.target.files[0]);
-		setFilename(e.target.files[0].name);
+		this.state = {
+			file: "",
+			fileName: "hello",
+			uploadedFile: "",
+			message: "",
+			uploadPercentage: "",
+			visibly: false,
+		};
+		this.OnSubmitImg = this.OnSubmitImg.bind(this);
+		this.OnChangeUp = this.OnChangeUp.bind(this);
+		this.OnToggleAlert = this.OnToggleAlert.bind(this);
+	}
+
+	OnChangeUp = (e) => {
+		if (e.target.files[0]) {
+			this.setState({
+				file: e.target.files[0],
+				fileName: e.target.files[0].name,
+			});
+		}
 	};
 
-	const onSubmit = async e => {
+	OnToggleAlert = (e) => {
+		this.setState({
+			visibly: false,
+		});
+	};
+
+	OnSubmitImg = async (e) => {
 		e.preventDefault();
 		const formData = new FormData();
-		formData.append("image", file);
-		formData.append("name", "hello");
+		formData.append("image", this.state.file);
 
 		try {
 			const res = await axios.post(
@@ -27,76 +50,114 @@ const FileUpload = () => {
 				formData,
 				{
 					headers: {
-						"Content-Type": "multipart/form-data"
+						"Content-Type": "multipart/form-data",
 					},
-					onUploadProgress: progressEvent => {
-						setUploadPercentage(
-							parseInt(
+					onUploadProgress: (progressEvent) => {
+						this.setState({
+							uploadPercentage: parseInt(
 								Math.round(
 									(progressEvent.loaded * 100) /
-										progressEvent.total
-								)
-							)
-						);
+										progressEvent.total,
+								),
+							),
+						});
 
-						// Clear percentage
-						setTimeout(() => setUploadPercentage(0), 2500);
-					}
-				}
+						setTimeout(
+							() =>
+								this.setState({
+									uploadPercentage: 0,
+								}),
+							2500,
+						);
+					},
+				},
 			);
 
-			const { fileName, filePath } = res.data;
-
-			setUploadedFile({ fileName, filePath });
-
-			setMessage("File Uploaded");
+			const url = res.data.url;
+			this.setState({
+				message: "uploaded ...",
+				visibly: true,
+			});
+			this.props.adder(url);
 		} catch (err) {
 			if (err.response.status === 500) {
-				setMessage("There was a problem with the server");
+				this.setState({
+					message: "There was a problem with the server",
+					visibly: true,
+				});
 			} else {
-				setMessage(err.response.data.msg);
+				this.setState({
+					message: err.response.data.msg,
+					visibly: true,
+				});
 			}
 		}
 	};
+	render() {
+		const {
+			message,
+			fileName,
+			uploadPercentage,
 
-	return (
-		<Fragment>
-			{message ? <Message msg={message} /> : null}
-			<form onSubmit={onSubmit}>
+			visibly,
+		} = this.state;
+		return (
+			<Fragment>
+				{message ? (
+					<Alert
+						color="info"
+						isOpen={visibly}
+						toggle={this.OnToggleAlert}
+					>
+						{message}
+					</Alert>
+				) : null}
+
 				<div className="custom-file mb-4">
 					<input
 						type="file"
 						className="custom-file-input"
 						id="customFile"
-						onChange={onChange}
+						onChange={this.OnChangeUp}
 					/>
 					<label className="custom-file-label" htmlFor="customFile">
-						{filename}
+						{fileName}
 					</label>
 				</div>
 
-				<Progress percentage={uploadPercentage} />
+				<Progress animated color="info" value={uploadPercentage} />
 
 				<input
-					type="submit"
+					type="button"
+					onClick={this.OnSubmitImg}
 					value="Upload"
 					className="btn btn-primary btn-block mt-4"
 				/>
-			</form>
-			{uploadedFile ? (
-				<div className="row mt-5">
-					<div className="col-md-6 m-auto">
-						<h3 className="text-center">{uploadedFile.fileName}</h3>
-						<img
-							style={{ width: "100%" }}
-							src={uploadedFile.filePath}
-							alt=""
-						/>
-					</div>
-				</div>
-			) : null}
-		</Fragment>
-	);
+
+				<UpImgs />
+			</Fragment>
+		);
+	}
+}
+
+Upload.propTypes = {
+	auth: PropTypes.object.isRequired,
 };
 
-export default FileUpload;
+const mapStateToProps = (state) => ({
+	auth: state.Auth,
+	err: state.Err,
+});
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		adder: (url) => dispatch({ type: ADD_IMG, payload: url }),
+	};
+};
+
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	)(Upload),
+);
