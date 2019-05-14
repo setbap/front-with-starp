@@ -61,6 +61,8 @@ class Product extends Component {
 			});
 		});
 
+		console.log(this.props);
+
 		axios
 			.get("http://localhost:5000/api/shop/allCategoreis")
 			.then((res) => {
