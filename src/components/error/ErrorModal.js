@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-const ErrModal = props => {
+const ErrModal = (props) => {
 	const { data } = props;
 	return (
 		<Modal
@@ -9,7 +9,9 @@ const ErrModal = props => {
 			toggle={props.handleErr}
 			className={props.className}
 		>
-			<ModalHeader toggle={props.handleErr}>Error</ModalHeader>
+			<ModalHeader toggle={props.handleErr}>
+				{props.head ? props.head : "Error"}
+			</ModalHeader>
 			<ModalBody>
 				{data.length
 					? props.data.map((item, index) => {

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Row, Col } from "reactstrap";
-import Image from "../../fakeData/A.svg";
 import { connect } from "react-redux";
 import { NEW_ERR } from "../../../actions/type";
 import axios from "axios";
 import ErrModal from "../../error/ErrorModal";
 import { Button, Label, Input } from "reactstrap";
+import toast from "toasted-notes";
 
 class Comments extends Component {
 	constructor(props) {
@@ -33,6 +33,7 @@ class Comments extends Component {
 						title: "",
 						content: "",
 					});
+					toast.notify("comment posted for see refresh page");
 					console.log(this.props);
 				})
 				.catch((err) => {
