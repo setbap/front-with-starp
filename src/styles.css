@@ -1,4 +1,36 @@
 .App {
-  font-family: sans-serif;
-  text-align: center;
+	font-family: sans-serif;
+	text-align: center;
+}
+
+.heart {
+	fill: gray;
+	position: relative;
+	top: 5px;
+	width: 50px;
+	animation: pulse 1s ease infinite;
+	transition: all 1s;
+}
+.heart:hover {
+	fill: pink;
+}
+
+.heart-fill {
+	fill: red;
+	position: relative;
+	top: 5px;
+	width: 50px;
+	animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
 }

@@ -7,7 +7,7 @@ export const DELETE_SPEC = "DELETE_SPEC";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const GET_CAT = "GET_CAT";
 export const GET_BRAND = "GET_BRAND";
-
+export const NEW_ERR = "NEW_ERR";
 export const ADD_IMG = "ADD_IMG";
 export const DELETE_IMG = "DELETE_IMG";
 export const ADD_PROD = "ADD_PROD";
