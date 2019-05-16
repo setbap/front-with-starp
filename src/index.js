@@ -7,12 +7,14 @@ import "./styles.css";
 import Navbar from "./components/MyNavbar";
 import Landing from "./components/Landing";
 // import Main from "./components/Main";
-import NewProduct from "./components/admin/Product/Product";
+// import NewProduct from "./components/admin/Product/Product";
 import Signup from "./components/Auth/Singup";
 import ValidateEmail from "./components/Auth/ValidateEmail";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import ChangePassword from "./components/Auth/ChangePassword";
 import Product from "./components/Product/product";
+import ProductList from "./components/productList/ProductList";
+
 import "toasted-notes/src/styles.css";
 
 import Login from "./components/Auth/Login";
@@ -47,7 +49,8 @@ function App() {
 				<Container>
 					<Switch>
 						{/* <Route exact path="/" component={Main} /> */}
-						<Route exact path="/" component={NewProduct} />
+						{/* <Route exact path="/" component={NewProduct} /> */}
+						<Route exact path="/" component={ProductList} />
 						<Route exact path="/product/:pid" component={Product} />
 						<Route exact path="/landing" component={Landing} />
 						<Route exact path="/signup" component={Signup} />

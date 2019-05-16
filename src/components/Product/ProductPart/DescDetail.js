@@ -13,7 +13,14 @@ const DescDetail = (props) => {
 			<div className=" text-justify ">
 				<p className=" mb-0">{props.detail.description}</p>
 			</div>
-			<Button className="shadow" outline size="lg" color="danger">
+			<Button
+				onClick={props.addToCart}
+				disabled={props.disabled ? false : true}
+				className="shadow"
+				outline
+				size="lg"
+				color="danger"
+			>
 				Add to Cart
 			</Button>
 		</Col>

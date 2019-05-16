@@ -118,7 +118,7 @@ class Product extends Component {
 		}
 	}
 
-	ChangeLike(e) {
+	changeLike(e) {
 		const prodId = this.props.match.params.pid;
 		console.log(prodId);
 
@@ -139,6 +139,32 @@ class Product extends Component {
 					toast.notify("wrong info");
 				} else if (err.response.status === 404) {
 					toast.notify("product not foound");
+				} else {
+					toast.notify("unknown err");
+				}
+			});
+	}
+
+	addToCart() {
+		const prodId = this.props.match.params.pid;
+		console.log(prodId);
+
+		axios
+			.post("http://localhost:5000/api/shop/addToCart", {
+				prodId: prodId,
+			})
+			.then((res) => {
+				toast.notify("item added to cart");
+			})
+			.catch((err) => {
+				if (!err.response.status) {
+					toast.notify("can not connect to internet");
+				} else if (err.response.status === 422) {
+					toast.notify("wrong info");
+				} else if (err.response.status === 404) {
+					toast.notify("product not foound");
+				} else if (err.response.status === 401) {
+					toast.notify("please login again");
 				} else {
 					toast.notify("unknown err");
 				}
@@ -184,7 +210,7 @@ class Product extends Component {
 								{this.state.title}
 
 								<div
-									onClick={() => this.ChangeLike()}
+									onClick={() => this.changeLike()}
 									className="d-inline ml-2"
 								>
 									<svg
@@ -204,7 +230,16 @@ class Product extends Component {
 					</div>
 					<Row className="my-4">
 						<ImgDetail detail={this.state} />
-						<DescDetail detail={this.state} />
+
+						<DescDetail
+							detail={this.state}
+							disabled={
+								this.props.auth ? this.props.auth.isAuth : false
+							}
+							addToCart={() => {
+								this.addToCart();
+							}}
+						/>
 					</Row>
 					<Nav className="d-block  d-flex justify-content-center shadow my-4  ">
 						<Nav tag="li" className="page-item">
